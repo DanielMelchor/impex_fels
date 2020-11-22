@@ -65,7 +65,11 @@
 							<td>{{ $l->numdoc }}</td>
 							<td>{{ \Carbon\Carbon::parse($l->fecha_emision)->format('d/m/Y') }}</td>
 							<td>{{ $l->nombre_factura }}</td>
-							<td>{{ $l->correo_electronico}}</td>
+							@if($l->flag == 'P' || $l->flag == 'E')
+								<td><a href="#" onclick="fn_modalcorreo( {{$l->id}} ); return false;">{{ $l->correo_electronico }}</a></td>
+							@else
+								<td>{{ $l->correo_electronico }}</td>
+							@endif
 							<td>{{ $l->total_documento }}</td>
 							<td>
 								@switch($l->flag)
@@ -165,6 +169,110 @@
 	  	</div>
 	</div>
 	<!-- /Modal Error -->
+	<!-- Modal correo -->
+	<div class="modal fade" id="ModalCorreo" tabindex="-1" role="dialog" aria-labelledby="ModalCorreoLabel" aria-hidden="true">
+		<div class="modal-dialog modal-md modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<form class="form-horizontal" id="myForm" name="contact" action="#">
+				<div class="card card-navy">
+					<div class="card-header">
+						<div class="row">
+							<div class="col-md-8">
+								<h6>Cambio de correo electrónico</h6>
+							</div>
+							<div class="col-md-4" style="text-align: right;">
+								<button type="submit" class="btn btn-sm btn-success" title="Grabar"><i class="fas fa-save"></i></button>
+								<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" title="Cerrar"><i class="fas fa-sign-out-alt"></i></button>
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<input type="hidden" id="ccid" name="ccid">
+						<div class="row">
+	        				<div class="col-md-10 offset-md-1 mb-3">
+	        					<div class="input-group">
+							  		<div class="input-group-prepend">
+								    	<label class="input-group-text" id="">Empresa</label>
+								  	</div>
+								  	<input type="text" id="ccempresa" name="ccempresa" class="form-control text-center" disabled>
+								</div>
+	        				</div>
+	        			</div>
+	        			<div class="row">
+	        				<div class="col-md-10 offset-md-1 mb-3">
+	        					<div class="input-group">
+							  		<div class="input-group-prepend">
+								    	<label class="input-group-text" id="">Tipo Documento</label>
+								  	</div>
+								  	<input type="text" id="cctipodocumento" name="cctipodocumento" class="form-control text-center" disabled>
+								</div>
+	        				</div>
+	        			</div>
+	        			<div class="row">
+	        				<div class="col-md-4 offset-md-1 mb-3">
+	        					<div class="input-group">
+							  		<div class="input-group-prepend">
+								    	<label class="input-group-text" id="">Serie</label>
+								  	</div>
+								  	<input type="text" id="ccserie" name="ccserie" class="form-control text-center" disabled>
+								</div>
+	        				</div>
+	        				<div class="col-md-6 mb-3">
+	        					<div class="input-group">
+							  		<div class="input-group-prepend">
+								    	<label class="input-group-text" id="">Documento</label>
+								  	</div>
+								  	<input type="text" id="ccdocumento" name="ccdocumento" class="form-control" style="text-align: right;" disabled>
+								</div>
+	        				</div>
+	        			</div>
+	        			<div class="row">
+	        				<div class="col-md-10 offset-md-1 mb-3">
+	        					<div class="input-group">
+							  		<div class="input-group-prepend">
+								    	<label class="input-group-text" id="">Fecha</label>
+								  	</div>
+								  	<input type="text" id="ccfecha" name="ccfecha" class="form-control text-center" disabled>
+								</div>
+	        				</div>
+	        			</div>
+	        			<div class="row">
+	        				<div class="col-md-10 offset-md-1 mb-3">
+	        					<div class="input-group">
+							  		<div class="input-group-prepend">
+								    	<label class="input-group-text" id="">Nombre</label>
+								  	</div>
+								  	<input type="text" id="ccnombre" name="ccnombre" class="form-control text-center" disabled>
+								</div>
+	        				</div>
+	        			</div>
+	        			<div class="row">
+	        				<div class="col-md-10 offset-md-1 mb-3">
+	        					<div class="input-group">
+							  		<div class="input-group-prepend">
+								    	<label class="input-group-text" id="">Correo Electrónico</label>
+								  	</div>
+								  	<input type="mail" id="cccorreo" name="cccorreo" class="form-control" autofocus required>
+								</div>
+	        				</div>
+	        			</div>
+	        			<div class="row">
+	        				<div class="col-md-10 offset-md-1 mb-3">
+	        					<div class="input-group">
+							  		<div class="input-group-prepend">
+								    	<label class="input-group-text" id="">Total</label>
+								  	</div>
+								  	<input type="number" id="cctotal" name="cctotal" class="form-control" style="text-align: right;" disabled>
+								</div>
+	        				</div>
+	        			</div>
+					</div>
+				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- /Modal correo -->
 @endsection
 @section('js')
 	<script src="{{asset('assets/plugins/datatables/jquery.dataTables.js')}}"></script>
@@ -275,5 +383,74 @@
 	        }
 	    });	
       }
+
+  	function fn_modalcorreo($id){
+      	$.ajax({
+	        headers: {
+	            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	        },
+	        url: "{{ route('trae_encabezado_documento') }}",
+	        method: "POST",
+	        data: {id: $id
+	              },
+	        success: function(response){
+	        	document.getElementById('ccid').value = response.id;
+	        	document.getElementById('ccempresa').value = response.nombre_comercial;
+	        	document.getElementById('cctipodocumento').value = response.tipodocumento_descripcion;
+	        	document.getElementById('ccserie').value = response.serie;
+	        	document.getElementById('ccdocumento').value = response.numdoc;
+	        	document.getElementById('ccfecha').value = convertDateFormat(response.fecha_emision);
+	        	document.getElementById('ccnombre').value = response.nombre_factura;
+	        	document.getElementById('cccorreo').value = response.correo_electronico;
+	        	document.getElementById('cctotal').value = response.total_documento;
+	        	$("#ModalCorreo").modal();
+	        },
+	        error: function(error){
+	            console.log(error);
+	        }
+        });	
+	}
+	function convertDateFormat(string) {
+        var date = string.replace('00:00:00','');
+        var info = date.split('-').reverse().join('/');
+        return info;
+   	}
+
+   	function actualizar_correo(){
+   		var correo = document.getElementById('cccorreo').value;
+   		var id = document.getElementById('ccid').value;
+   		$.ajax({
+	        headers: {
+	            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	        },
+	        url: "{{ route('actualizar_correo') }}",
+	        method: "POST",
+	        data: {id: id,
+	        	   email: correo
+	              },
+	        success: function(response){
+	        	swal({
+                    title: 'Trabajo Finalizado !!!',
+                    text: response,
+                    type: 'success',
+                    },
+                    function(){
+                        return window.location.href = "{{route('consulta_fel')}}";
+                    }
+                );
+
+	        },
+	        error: function(error){
+	            console.log(error);
+	        }
+        });	
+   	}
+
+	   	$(function(){
+	        $("#myForm").submit(function(){
+	            actualizar_correo();
+	            return false;
+	        })
+	    });
     </script>
 @endsection

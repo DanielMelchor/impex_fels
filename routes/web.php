@@ -36,6 +36,8 @@ Route::group(['prefix' => 'consultas'], function () {
 	Route::get('listado_fel','MaestroXmlController@index')->name('consulta_fel');
 	Route::post('trae_detalle_autoriza', 'MaestroXmlController@get_aut')->name('trae_detalle_autoriza');
 	Route::post('trae_detalle_errores', 'MaestroXmlController@get_err')->name('trae_detalle_errores');
+	Route::post('trae_encabezado_documento', 'MaestroXmlController@get_header')->name('trae_encabezado_documento');
+	Route::post('actualizar_correo', 'MaestroXmlController@set_mail_account')->name('actualizar_correo');
 });
 
 Route::group(['prefix' => 'municipios'], function () {
