@@ -159,6 +159,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-10 offset-md-1 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">Formato de Impresión</span>
+                                </div>
+                                <input type="number" id="formato" name="formato" class="form-control" value="{{ $empresa->formato }}" style="text-align: right;" min="1" required>
+                            </div>
+                        </div>
+                    </div>
                     <hr>
                     <div class="row">
                         <div class="col-md-10 offset-md-1 mb-3">

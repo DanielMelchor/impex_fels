@@ -38,7 +38,9 @@ class XmlController extends Controller
     		           ->select('id')
     		           ->first();
 
-            $conn = oci_connect('IMPEX', 'IMPEX', 'localhost:1521/XE');
+    		$stid = $fac_xml->xml;
+
+            /*$conn = oci_connect('IMPEX', 'IMPEX', 'localhost:1521/XE');
             $stid = oci_parse($conn, "SELECT XML FROM FAC_MAESTRO_XML WHERE GEN_EMPRESA_FEL_ID=$cia AND TIPODOC="."'"."$tipoDoc"."'"." AND SERIE="."'".$serie."'"." AND numdoc=$docto");
             oci_execute($stid);
 
@@ -46,8 +48,9 @@ class XmlController extends Controller
 				foreach ($fila as $elemento) {
          			$resultado = ($elemento !== null ? htmlentities($elemento, ENT_QUOTES) : "");
 				}	
-			}
+			}*/
 
+			$resultado = htmlentities($stid, ENT_QUOTES);
     		$resultado = str_replace("&lt;", "<", $resultado);
     		$resultado = str_replace("&gt;", ">", $resultado);
     		$resultado = str_replace("&quot;", "\"", $resultado);

@@ -33,7 +33,8 @@ class GenEmpresaFelController extends Controller
             'correo_electronico' => 'required',
             'alias'              => 'required',
             'llave_firma'        => 'required',
-            'llave_certifica'    => 'required'
+            'llave_certifica'    => 'required',
+            'formato'            => 'required'
         ]);
 
         $empresa = new GenEmpresaFel();
@@ -51,6 +52,7 @@ class GenEmpresaFelController extends Controller
         $empresa->alias              = $validData['alias'];
         $empresa->llave_firma        = $validData['llave_firma'];
         $empresa->llave_certifica    = $validData['llave_certifica'];
+        $empresa->formato            = $validData['formato'];
         $empresa->save();
 
         Session::flash('success', 'FEL Guardado con exito !!!' );
@@ -83,7 +85,8 @@ class GenEmpresaFelController extends Controller
             'correo_electronico' => 'required',
             'alias'              => 'required',
             'llave_firma'        => 'required',
-            'llave_certifica'    => 'required'
+            'llave_certifica'    => 'required',
+            'formato'            => 'required'
         ]);
 
         $empresa = GenEmpresaFel::findOrFail($id);
@@ -101,6 +104,7 @@ class GenEmpresaFelController extends Controller
         $empresa->alias              = $validData['alias'];
         $empresa->llave_firma        = $validData['llave_firma'];
         $empresa->llave_certifica    = $validData['llave_certifica'];
+        $empresa->formato            = $validData['formato'];
         $empresa->save();
 
         Session::flash('success', 'FEL Guardado con exito !!!' );
