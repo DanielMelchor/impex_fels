@@ -35,7 +35,7 @@ class XmlController extends Controller
     		           ->where('tipodoc', $tipoDoc)
     		           ->where('serie', $serie)
     		           ->where('numdoc', $docto)
-    		           ->select('id')
+    		           ->select('id', 'xml')
     		           ->first();
 
     		$stid = $fac_xml->xml;
