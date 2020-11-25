@@ -19,7 +19,8 @@ class MaestroXmlController extends Controller
     	$listado = DB::table('gen_empresa_fels gef')
                ->join('fac_maestro_xml fmx', 'gef.id', 'fmx.gen_empresa_fel_id')
                ->join('GEN_TIPO_DOCUMENTO gtd', 'fmx.tipodoc', 'gtd.codtipo')
-               ->select('gef.nombre_comercial', 'fmx.serie', 'fmx.numdoc', 'fmx.fecha_emision', 'fmx.id', 'fmx.flag', 'gtd.descripcion as tipodocumento_descripcion', 'fmx.nombre_factura', 'fmx.correo_electronico', 'fmx.total_documento')
+               ->join('GEN_EMPRESA GE', 'gef.gen_empresa_id', 'ge.codemp')
+               ->select('ge.nomemp as nombre_comercial', 'fmx.serie', 'fmx.numdoc', 'fmx.fecha_emision', 'fmx.id', 'fmx.flag', 'gtd.descripcion as tipodocumento_descripcion', 'fmx.nombre_factura', 'fmx.correo_electronico', 'fmx.total_documento')
                ->orderBy('fmx.id', 'DESC')
                ->get();
 
