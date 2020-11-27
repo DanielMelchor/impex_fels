@@ -19,7 +19,7 @@ class XmlController extends Controller
     public function firmaDocumento(request $request){
     	if (isset($request['pCia'])&&isset($request['pTipoDoc'])&&isset($request['pSerie'])&&isset($request['pDocto'])&&isset($request['pCorreo'])) {
 
-    		$fel = GenEmpresaFel::where('gen_empresa_id', $request['pCia'])->first();
+    		$fel = GenEmpresaFel::where('id', $request['pCia'])->first();
     		//echo $fel;
     		
     		$cia     = $request['pCia'];
@@ -38,7 +38,7 @@ class XmlController extends Controller
     		           ->select('id', 'xml')
     		           ->first();
 
-    		$stid = $fac_xml->xml;
+			$stid = $fac_xml->xml;
 
             /*$conn = oci_connect('IMPEX', 'IMPEX', 'localhost:1521/XE');
             $stid = oci_parse($conn, "SELECT XML FROM FAC_MAESTRO_XML WHERE GEN_EMPRESA_FEL_ID=$cia AND TIPODOC="."'"."$tipoDoc"."'"." AND SERIE="."'".$serie."'"." AND numdoc=$docto");
@@ -54,7 +54,7 @@ class XmlController extends Controller
     		$resultado = str_replace("&lt;", "<", $resultado);
     		$resultado = str_replace("&gt;", ">", $resultado);
     		$resultado = str_replace("&quot;", "\"", $resultado);
-    		$resultado = str_replace("&quot;", "\"", $resultado);
+			$resultado = str_replace("&quot;", "\"", $resultado);
 
     		$firmado = $this->firma_inicial($cia, $tipoDoc, $serie, $docto, $fel->llave_firma, $fel->alias, 'N', $codigo, base64_encode($resultado));
 
@@ -99,8 +99,8 @@ class XmlController extends Controller
 			       ->where('tipodoc', $tipoDoc)
 			       ->where('serie', $serie)
 			       ->where('numdoc', $numDocto)
-			       ->first();
-
+				   ->first();
+			
 			$xml->flag = 'F';
 			$xml->sat_autorizacion   = $obj->uuid;
 			$xml->sat_seriefel       = $obj->serie;
@@ -132,7 +132,7 @@ class XmlController extends Controller
 	}
 
     public function firma_inicial(int $cia, string $tipoDoc, string $serie, int $numDocto, string $llaveFirma, string $alias, string $es_anulacion, int $codigo, $archivo){
-    	$registro_xml = fac_maestro_xml::where('gen_empresa_fel_id', $cia)
+		$registro_xml = fac_maestro_xml::where('gen_empresa_fel_id', $cia)
     	                ->where('tipodoc', $tipoDoc)
     	                ->where('serie', $serie)
     	                ->where('numdoc', $numDocto)
