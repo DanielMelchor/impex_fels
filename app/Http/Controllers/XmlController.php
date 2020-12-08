@@ -104,7 +104,7 @@ class XmlController extends Controller
 			$xml->flag = 'F';
 			$xml->sat_autorizacion   = $obj->uuid;
 			$xml->sat_seriefel       = $obj->serie;
-			$xml->sat_correlativofel = $obj->numero;
+			$xml->sat_correlativofel = (string)$obj->numero;
 			//$xml->fecha_fel          = date_format($obj->fecha, '%d/%m/%Y H:i:s');
 			//$xml->fecha_fel          = to_date(substr('$fecha',1,10)||' '||substr('$fecha',12,8),'YYYY/MM/DD HH24:mi:ss')
 			$xml->sat_xml            = $obj->xml_certificado;
